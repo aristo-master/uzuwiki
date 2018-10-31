@@ -1,0 +1,302 @@
+{% extends "wikis/base.html" %}
+{% load wiki_tags %}
+
+{% block title %}
+{{page_title}}の編集|{{wiki_conf.name}}
+{% endblock %}
+
+{% block body %}
+
+<style>
+
+.container{
+    margin-right:0;
+    margin-left:0;
+    padding-left:15px;
+    padding-right:15px;
+    padding-top:1em;
+    width:100%;
+    max-width:100%;
+    height:90%;
+}
+
+.edit-contents-wrapper{
+    float:left;
+    width:100%;
+}
+.main-contents-wrapper{
+    float:left;
+    width:100%;
+}
+
+@media (min-width: 768px) {
+    .edit-contents-wrapper{
+        width:50%;
+    }
+    .main-contents-wrapper{
+        width:50%;
+        padding-left:5px;
+    }
+}
+
+.edit-contents textarea{
+    width:100%;
+    height: 555px;
+    padding-left:5px;
+    padding-right:5px;
+    border: 1px solid #666666;
+    margin:0;
+    resize: none;
+}
+
+.main-contents-scroll{
+   overflow-x: visible;
+   overflow-y: scroll;
+   height: 555px;
+   border: 1px solid #666666;
+   padding-left:15px;
+   background-color:#f3f3f3;
+}
+.main-contents-scroll::-webkit-scrollbar{
+   height: 12px;
+}
+.main-contents-scroll::-webkit-scrollbar-track{
+   background: #F1F1F1;
+}
+.main-contents-scroll::-webkit-scrollbar-thumb {
+   background: #BCBCBC;
+}
+
+.page-dir{
+    font-size:120%;
+}
+
+.contents-header{
+    height:45px;
+}
+
+.left-parts{
+    float:left;
+    margin-top:4px;
+}
+
+.left-parts button{
+    margin-top:2px;
+    margin-bottom:2px;
+}
+
+.right-parts{
+    float:right;
+}
+
+</style>
+
+<div class="container">
+
+    <form id="form" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="wiki_id" value="{{form.wiki_id.value}}"/>
+        <input type="hidden" name="page_name" value="{{form.page_name.value}}"/>
+        <div class="page-name-wrapper">
+            <div class="breadcrumb_list-wrapper">
+                <div class="breadcrumb_list">{% breadcrumb_list wiki_id page_dirs %}</div>
+            </div>
+            <h1 class="page-title">{{page_title}}の編集</h1>
+        </div>
+        <div class="contents-header">
+            <div class="right-parts">
+                <a href="{% wiki_url 'show' wiki_id page_dirs %}" class="btn btn-secondary">戻る</a>
+                <button type="submit" id="save" class="btn btn-primary">保存</button>
+            </div>
+            <div class="left-parts">
+                <button type="button" id="edit-button-heading1" class="btn btn-sm btn-dark powertip" title="見出し１"><i class="fas fa-heading">1</i></button>
+                <button type="button" id="edit-button-heading2" class="btn btn-sm btn-dark powertip" title="見出し２"><i class="fas fa-heading">2</i></button>
+                <button type="button" id="edit-button-heading3" class="btn btn-sm btn-dark powertip" title="見出し３"><i class="fas fa-heading">3</i></button>
+                <button type="button" id="edit-button-bold" class="btn btn-sm btn-dark powertip" title="太字"><i class="fas fa-bold"></i></button>
+                <button type="button" id="edit-button-italic" class="btn btn-sm btn-dark powertip" title="斜体"><i class="fas fa-italic"></i></button>
+                <button type="button" id="edit-button-underline" class="btn btn-sm btn-dark powertip" title="下線"><i class="fas fa-underline"></i></button>
+                <button type="button" id="edit-button-list-ul" class="btn btn-sm btn-dark powertip" title="リスト"><i class="fas fa-list-ul"></i></button>
+                <button type="button" id="edit-button-list-ol" class="btn btn-sm btn-dark powertip" title="番号リスト"><i class="fas fa-list-ol"></i></button>
+                <button type="button" id="edit-button-table" class="btn btn-sm btn-dark powertip" title="テーブル"><i class="fas fa-table"></i></button>
+                <button type="button" id="edit-button-minus" class="btn btn-sm btn-dark powertip" title="水平線"><i class="fas fa-minus"></i></button>
+                <button type="button" id="edit-button-link" class="btn btn-sm btn-dark powertip" title="リンク"><i class="fas fa-link"></i></button>
+                <button type="button" id="edit-button-quote-right" class="btn btn-sm btn-dark powertip" title="引用"><i class="fas fa-quote-right"></i></button>
+                <button type="button" id="edit-button-file-image" class="btn btn-sm btn-dark powertip" title="画像"><i class="fas fa-file-image"></i></button>
+            </div>
+        </div>
+        <div class="edit-contents-wrapper">
+            <div class="edit-contents">
+                <textarea id="contents" name="contents">{{form.contents.value}}</textarea>
+            </div>
+        </div>
+        <div class="main-contents-wrapper">
+            <div id="main-contents-scroll" class="main-contents-scroll">
+                <div id="main-contents" class="main-contents">
+                    <div class="main-contents-body">
+                        {% autoescape off %}
+                        {{main_contents}}
+                        {% endautoescape %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script>
+
+var contents_tmp;
+
+$(function(){
+    preview();
+});
+
+$(function(){
+    setInterval(function(){
+        preview();
+    },1000);
+});
+
+function preview(){
+    var contents = $("#contents").val();
+    if(contents != contents_tmp){
+        contents_tmp = contents
+        $.ajax({
+            url:'{% url 'webapis:md_to_html' %}',
+            type:'POST',
+            cache: false,
+            data: $("#form").serialize(),
+            success: function (data) {
+                $("#main-contents").html(data);
+            }
+        });
+    }
+}
+
+</script>
+
+<script>
+// 現在の縦スクロール位置
+var scrollPosition = document.getElementById("contents").scrollTop;
+// スクロール要素の高さ
+var scrollHeight = document.getElementById("contents").scrollHeight;
+
+var scrollMode;
+$('#contents').on('scroll', function() {
+
+    if(scrollMode == "contents"){
+        scroll_sync($("#contents"),$("#main-contents-scroll"));
+    }else if (scrollMode == "main-contents-scroll"){
+        scrollMode = ""
+    }else{
+        scrollMode = "contents";
+        scroll_sync($("#contents"),$("#main-contents-scroll"));
+    }
+
+});
+
+$('#main-contents-scroll').on('scroll', function() {
+
+    if(scrollMode == "main-contents-scroll"){
+        scroll_sync($("#main-contents-scroll"),$("#contents"));
+    }else if (scrollMode == "contents"){
+        scrollMode = ""
+    }else{
+        scrollMode = "main-contents-scroll";
+        scroll_sync($("#main-contents-scroll"),$("#main-contents-scroll"));
+    }
+
+});
+
+function scroll_sync(from,to){
+
+    // スクロールされたピクセル数
+    var scroll = from.scrollTop();
+
+    // スクロール範囲の最大のピクセル数
+    var range = from.get(0).scrollHeight - from.get(0).offsetHeight;
+
+    // スクロール率
+    var rits = scroll / range;
+
+    // スクロールされたピクセル数
+    // スクロール範囲の最大のピクセル数
+    var rangeTo = to.get(0).scrollHeight - to.get(0).offsetHeight;
+
+    to.scrollTop(rangeTo * rits);
+
+}
+
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-powertip/1.2.0/jquery.powertip.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-powertip/1.2.0/css/jquery.powertip.min.css" />
+<script>
+    $(function() {
+        $('.powertip').powerTip();
+    });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.selection/1.0.1/jquery.selection.min.js"></script>
+
+<script>
+
+$(function() {
+
+    $('#edit-button-heading1').click(function(){
+      $('#contents').selection('insert', {text: '#', mode: 'before'});
+    });
+
+    $('#edit-button-heading2').click(function(){
+      $('#contents').selection('insert', {text: '##', mode: 'before'});
+    });
+
+    $('#edit-button-heading3').click(function(){
+      $('#contents').selection('insert', {text: '###', mode: 'before'});
+    });
+
+    $('#edit-button-bold').click(function(){
+      $('#contents').selection('insert', {text: '**', mode: 'before'}).selection('insert', {text: '**', mode: 'after'});
+    });
+
+    $('#edit-button-italic').click(function(){
+      $('#contents').selection('insert', {text: '*', mode: 'before'}).selection('insert', {text: '*', mode: 'after'});
+    });
+
+    $('#edit-button-underline').click(function(){
+      $('#contents').selection('insert', {text: '++', mode: 'before'}).selection('insert', {text: '++', mode: 'after'});
+    });
+
+    $('#edit-button-list-ul').click(function(){
+      $('#contents').selection('insert', {text: '-', mode: 'before'});
+    });
+
+    $('#edit-button-list-ol').click(function(){
+      $('#contents').selection('insert', {text: '1.', mode: 'before'});
+    });
+
+    $('#edit-button-table').click(function(){
+      $('#contents').selection('insert', {text: '|||||\n|||||\n|||||', mode: 'before'});
+    });
+
+    $('#edit-button-minus').click(function(){
+      $('#contents').selection('insert', {text: '---', mode: 'before'});
+    });
+
+    $('#edit-button-link').click(function(){
+       $('#contents').selection('insert', {text: ' [[', mode: 'before'}).selection('insert', {text: ']]', mode: 'after'});
+    });
+
+    $('#edit-button-quote-right').click(function(){
+       $('#contents').selection('insert', {text: ' >', mode: 'before'});
+    });
+
+    $('#edit-button-file-image').click(function(){
+       $('#contents').selection('insert', {text: ' ![', mode: 'before'}).selection('insert', {text: '](url)', mode: 'after'});
+    });
+
+});
+
+</script>
+{% endblock %}

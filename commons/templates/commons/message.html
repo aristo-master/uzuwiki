@@ -1,0 +1,107 @@
+<style>
+    .msg-container {
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+      padding-right: 15px;
+      padding-left: 15px;
+    }
+
+    @media (min-width: 576px) {
+      .msg-container {
+        padding-right: 15px;
+        padding-left: 15px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .msg-container {
+        padding-right: 15px;
+        padding-left: 15px;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .msg-container {
+        padding-right: 15px;
+        padding-left: 15px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .msg-container {
+        padding-right: 15px;
+        padding-left: 15px;
+      }
+    }
+
+    @media (min-width: 576px) {
+      .msg-container {
+        width: 540px;
+        max-width: 100%;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .msg-container {
+        width: 720px;
+        max-width: 100%;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .msg-container {
+        width: 960px;
+        max-width: 100%;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .msg-container {
+        width: 1140px;
+        max-width: 100%;
+      }
+    }
+
+    .header-message{
+        padding:0.5em;
+    }
+
+
+
+</style>
+
+<div class="msg-container">
+    {% if messages %}
+    <div>
+        {% for message in messages %}
+        {% if message.tags == "error" %}
+        <p class="alert alert-danger">{{ message }}</p>
+        {% else %}
+        <p class="alert alert-{{message.tags}}">{{ message }}</p>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if form %}
+    {% if form.errors %}
+    <div class="alert alert-warning">
+        {% for field in form %}
+        {% if field.errors %}
+        {{ field.label_tag }}
+        {{ field.errors }}
+        {% endif %}
+        {% endfor %}
+        {% if form.non_field_errors %}
+        <ul>
+            {% for error in form.non_field_errors %}
+            <li>{{error}}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% endif %}
+
+</div>

@@ -1,0 +1,23 @@
+{% extends "commons/base.html" %}
+
+{% block title %}{{service_title}}|ログアウト{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% include "commons/message.html" %}
+
+    <h1 class="text-center">ログアウトしました</h1>
+
+
+    <div class="text-center">
+        <a href="{% url 'accounts:index' %}" class="btn btn-primary">もう一度ログインする</a>
+    </div>
+
+    <div class="text-center" style="margin-top:1em;">
+        {% include "commons/return.html" %}
+    </div>
+
+</div>
+{% endblock %}

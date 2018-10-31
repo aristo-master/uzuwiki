@@ -1,0 +1,23 @@
+<div class="comment">
+    {% for comment in comments %}
+    {% if forloop.counter <= 10 %}
+    <div class="comment">
+        <p style="margin-left:{{comment.hierarchy}}em;">
+            <span class="comment-id">{{comment.id}}：</span>
+            <span class="comment-body">{{comment.body}}</span>
+            <span> - </span>
+            <span class="comment-name">{{comment.name}}</span>
+            <span class="comment-time">({{comment.timestamp}})</span>
+        </p>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+<div class="text-right">
+    {% if comments|length >= 10 %}
+    <div>直近の１０件のみを表示しています。</div>
+    {% endif %}
+    <div><a href="{{comment_url}}#comment">[全てのコメントを表示する]</a></div>
+</div>
+

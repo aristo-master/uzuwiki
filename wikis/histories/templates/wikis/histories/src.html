@@ -1,0 +1,132 @@
+{% extends "wikis/base_editor.html" %}
+{% load wiki_tags %}
+
+{% block title %}
+{{page_title}}の履歴ソース|{{wiki_conf.name}}
+{% endblock %}
+
+{% block main_contents %}
+
+<style>
+
+.container{
+    margin-right:0;
+    margin-left:0;
+    padding-left:15px;
+    padding-right:15px;
+    padding-top:1em;
+    width:100%;
+    max-width:100%;
+    height:90%;
+}
+
+.edit-contents-wrapper{
+    float:left;
+    width:100%;
+}
+.main-contents-wrapper{
+    float:left;
+    width:100%;
+}
+
+@media (min-width: 768px) {
+    .edit-contents-wrapper{
+        width:50%;
+    }
+    .main-contents-wrapper{
+        width:50%;
+        padding-left:5px;
+    }
+}
+
+
+.edit-contents textarea{
+    width:100%;
+    height: 555px;
+    padding-left:5px;
+    padding-right:5px;
+    border: 1px solid #666666;
+    margin:0;
+    resize: none;
+}
+
+.main-contents-scroll{
+   overflow-x: visible;
+   overflow-y: scroll;
+   height: 555px;
+   border: 1px solid #666666;
+   padding-left:15px;
+   background-color:#f3f3f3;
+}
+.main-contents-scroll::-webkit-scrollbar{
+   height: 12px;
+}
+.main-contents-scroll::-webkit-scrollbar-track{
+   background: #F1F1F1;
+}
+.main-contents-scroll::-webkit-scrollbar-thumb {
+   background: #BCBCBC;
+}
+
+.page-dir{
+    font-size:120%;
+}
+
+.contents-header{
+    height:45px;
+}
+
+</style>
+
+<div class="container">
+
+    <form id="form" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="wiki_id" value="{{wiki_id}}"/>
+        <input type="hidden" name="page_name" value="{{form.page_name.value}}"/>
+        <div class="page-name-wrapper">
+        <div class="breadcrumb_list-wrapper">
+            <div class="breadcrumb_list">{% breadcrumb_list wiki_id page_dirs %}</div>
+        </div>
+        <h1 class="page-title">{{page_title}}の履歴のソース</h1>
+        </div>
+        <div class="contents-header text-right">
+            <a href="{% wiki_url 'history' wiki_id page_dirs %}" class="btn btn-secondary">戻る</a>
+        </div>
+        <div class="edit-contents-wrapper">
+            <div class="edit-contents">
+                <textarea id="contents" name="contents" readonly>{{history_file}}</textarea>
+            </div>
+        </div>
+        <div class="main-contents-wrapper">
+            <div class="main-contents-scroll">
+                <div id="main-contents" class="main-contents">
+                    <div class="main-contents-body">
+                        {% autoescape off %}
+                        {{main_contents}}
+                        {% endautoescape %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script>
+
+$(function(){
+    $.ajax({
+        url:'{% url 'webapis:md_to_html' %}',
+        type:'POST',
+        cache: false,
+        data: $("#form").serialize(),
+        success: function (data) {
+            $("#main-contents").html(data);
+        }
+    });
+});
+
+
+</script>
+{% endblock %}

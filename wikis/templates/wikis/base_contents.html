@@ -1,0 +1,107 @@
+{% extends "wikis/base.html" %}
+
+{% block body %}
+
+<style>
+
+.container{
+    padding-left:0px;
+    padding-right:0px;
+    padding-top:1em;
+}
+.right-contents-wrapper{
+    display:none
+}
+
+.main-contents-wrapper{
+    width: 100%;
+    padding-left:5px;
+    padding-right:5px:
+}
+
+.left-contents-wrapper{
+    width: 100%;
+}
+
+.post-title-wrapper{
+    background-color: #99cc00
+}
+
+@media (min-width: 768px) {
+   .body-contents-wrapper{
+       float:left;
+   }
+   .left-contents-wrapper{
+       float:left;
+       width: 200px;
+   }
+   .main-contents-wrapper{
+       float:right;
+       width: 510px;
+       padding-left:0px;
+   }
+}
+@media (max-width: 768px) {
+    .container{
+        max-width: 100%;
+    }
+}
+@media (min-width: 992px) {
+  .main-contents-wrapper {
+    width: 750px;
+    padding-left:0;
+    padding-right:0:
+  }
+}
+
+@media (min-width: 1200px) {
+  .main-contents-wrapper {
+    width: 930px;
+  }
+}
+
+.left-contents h2{
+    font-size: 1.25rem;
+}
+
+.scroll{
+   overflow: auto;
+   white-space: nowrap;
+}
+.scroll::-webkit-scrollbar{
+   height: 12px;
+}
+.scroll::-webkit-scrollbar-track{
+   background: #F1F1F1;
+}
+.scroll::-webkit-scrollbar-thumb {
+   background: #BCBCBC;
+}
+.scroll .table {
+  margin-bottom: 0.2em;
+}
+
+</style>
+
+<div class="container">
+    <div class="main-contents-wrapper">
+        {% block main_contents %}main_contents{% endblock %}
+    </div>
+    <div class="left-contents-wrapper">
+        <div class="left-contents">
+            {% include "wikis/left-contents.html" %}
+        </div>
+    </div>
+</div>
+
+<script>
+
+setTimeout(function(){
+    $(".main-contents-wrapper table").each(function(index, element){
+        $(this).wrap("<div class='scroll'></div>");
+    });
+}, 100);
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,101 @@
+<style>
+
+    *{
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .separator{
+        border-top: 2px solid #666;
+    }
+
+    .left-contents h1{
+     font-size:140% !important;
+     background-color:#DDDDDD;
+     padding:0.2em;
+    }
+
+    .left-contents h2{
+     font-size:130% !important;
+     border: solid #DDDDDD;
+     border-width: 1px 10px 3px 10px;
+     padding:0.2em;
+    }
+
+    .left-contents h3{
+     font-size:120% !important;
+     border: solid #DDDDDD;
+     border-width: 0px 0px 2px 3px;
+     padding:0.2em;
+    }
+
+    .left-contents h4{
+     font-size:110% !important;
+    }
+
+    .left-contents h5{
+     font-size:100% !important;
+    }
+
+    .left-contents h6{
+     font-size:90% !important;
+    }
+
+    h2.left-contents-banar{
+     font-size:130% !important;
+     border: solid #DDDDDD;
+     border-width: 1px 10px 1px 10px;
+     padding:0.2em;
+    }
+
+
+</style>
+
+<div class="left-contents-html">
+    <div class="left-contents-menu">
+        <h2 class="left-contents-banar text-center">UzuWiki</h2>
+        <div id="left-contents-menu-body" class="left-contents-menu-body"></div>
+        <div><a href="{% url 'wikis.pages:edit' wiki_id 'SideBar' %}">ここを編集</a></div>
+    </div>
+    <div class="left-contents-latest-update">
+        <h2>最近の更新</h2>
+        <div id="left-contents-latest-update-body"></div>
+        <div><a href="{% url 'wikis.pages:updates' wiki_id  %}">全て表示</a></div>
+    </div>
+
+    <script>
+
+$(function(){
+    $.ajax({
+        url:'{% url 'webapis:get_side_bar' %}',
+        type:'GET',
+        cache: false,
+        data: {
+            wiki_id: "{{wiki_id}}"
+        },
+        success: function (data) {
+            $("#left-contents-menu-body").html(data);
+        }
+    });
+});
+
+$(function(){
+    $.ajax({
+        url:'{% url 'webapis:get_latest_update' %}',
+        type:'GET',
+        cache: false,
+        data: {
+            wiki_id: "{{wiki_id}}"
+        },
+        success: function (data) {
+            $("#left-contents-latest-update-body").html(data);
+        }
+    });
+});
+    </script>
+
+    <div class="left-bottom-contents">
+        {% include "wikis/left-bottom-contents.html" %}
+    </div>
+
+</div>

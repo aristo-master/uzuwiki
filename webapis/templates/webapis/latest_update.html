@@ -1,0 +1,34 @@
+<style>
+    ul.latest-update {
+        padding-left:30px;
+    }
+    .update-day {
+        font-weight:bold;
+    }
+
+
+</style>
+
+<div>
+    {% regroup pages by update_day as pages_days %}
+    {% for pages_day in pages_days %}
+    {% if forloop.counter <= 2 %}
+    <div class="update-day">{{pages_day.grouper}}</div>
+    <ul class="latest-update">
+        {% for page in pages_day.list %}
+        {% if page.status != "inactive" %}
+        <li>
+            <a href="{{page.url}}">{{ page.file_name }}</a>
+        </li>
+        {% else %}
+        <li>
+            <a href="{{page.url}}">{{ page.file_name }}</a> deleted
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endfor %}
+</div>
+
+

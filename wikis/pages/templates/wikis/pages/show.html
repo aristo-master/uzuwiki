@@ -1,0 +1,69 @@
+{% extends "wikis/base_contents.html" %}
+{% load wiki_tags %}
+
+{% block robots %}{% endblock %}
+{% block title %}
+{{page_title}}|{{wiki_conf.name}}
+{% endblock %}
+
+{% block main_contents %}
+
+<div class="main-contents">
+    <div class="page-name-wrapper">
+        <div class="breadcrumb_list-wrapper">
+            <div class="breadcrumb_list">{% breadcrumb_list wiki_id page_dirs %}</div>
+        </div>
+    </div>
+    <div class="main-contents-body">
+        {% autoescape off %}
+        {{main_contents}}
+        {% endautoescape %}
+    </div>
+    <div class="show-bottom-contents">
+        {% include "wikis/pages/show-bottom-contents.html" %}
+    </div>
+</div>
+
+{% if comment_flg %}
+
+<hr/>
+
+<div class="comment-wrapper">
+    <h2 id="comment">コメント</h2>
+    {% if not page_conf.confs.comment_exist_flg %}
+    <div class="comment">
+        <p>コメントはありません。</p>
+    </div>
+    {% else %}
+    <div id="comment-async"></div>
+    {% endif %}
+
+    <div id="white_comment">
+        <a href="{% wiki_url 'comment' wiki_id page_dirs %}#white_comment">[コメントする]</a>
+    </div>
+</div>
+
+{% if page_conf.confs.comment_exist_flg %}
+<script>
+
+$(function(){
+    $.ajax({
+        url:'{% url 'wikis.comments:get_comments' wiki_id %}',
+        type:'GET',
+        cache: false,
+        data: {
+        page_name: "{{page_name}}",
+        },
+        success: function (data) {
+            $("#comment-async").html(data);
+        }
+    });
+});
+
+
+</script>
+{% endif %}
+
+{% endif %}
+{% endblock %}
+

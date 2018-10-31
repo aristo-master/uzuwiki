@@ -1,0 +1,31 @@
+{% extends "wikis/base_contents.html" %}
+{% load wiki_tags %}
+
+{% block title %}
+ヘルプページ|{{wiki_conf.name}}
+{% endblock %}
+
+{% block main_contents %}
+
+<div class="main-contents">
+    <div class="main-contents-body">
+        <h1>ヘルプページ</h1>
+
+        <h2>管理人に連絡</h2>
+
+        <p>管理人への問い合わせ、要望、違反の問題報告等は、以下の連絡フォームよりご連絡下さい。</p>
+
+        <ul>
+            <li>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeD990_vtT-kHOTL-wDdxG5VG7esVKKkXbT--BpVeOVIDU0kg/viewform"
+                   target="_blank">連絡フォーム</a>
+            </li>
+        </ul>
+
+
+    </div>
+</div>
+
+
+{% endblock %}
+

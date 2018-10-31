@@ -1,0 +1,56 @@
+{% extends "wikis/base_contents.html" %}
+{% load wiki_tags %}
+
+{% block title %}
+{{page_title}}の管理|{{wiki_conf.name}}
+{% endblock %}
+
+{% block main_contents %}
+<style>
+    .main-contents ul {
+        list-style: none;
+        padding-left:1em;
+    }
+
+</style>
+
+<div class="main-contents">
+    <div class="page-name-wrapper">
+        <div class="breadcrumb_list-wrapper">
+            <div class="breadcrumb_list">{% breadcrumb_list wiki_id page_dirs %}</div>
+        </div>
+        <h1 class="page-title">{{page_title}}の管理</h1>
+    </div>
+    <div class="main-contents-body">
+        <p>ページ個別の管理画面です。<br/>Wiki全体の管理を行う場合は
+            <a href="{% url 'wikis.maintenances:index' wiki_id %}">[Wiki全体の管理]</a>に進んでください。
+        </p>
+
+        <h2>管理項目</h2>
+        <form id="form" method="post">
+            {% csrf_token %}
+            <h2>管理項目</h2>
+            <input type="hidden" name="wiki_id" value="{{form.wiki_id.value}}"/>
+            <input type="hidden" name="page_name" value="{{form.page_name.value}}"/>
+            <h3>コメント</h3>
+            {{form.comment_mode}}
+
+            <h3>添付</h3>
+            {{form.attachment_mode}}
+
+            <h3>凍結</h3>
+            {{form.freeze_mode}}
+
+            <h3>管理人のユーザダイジェスト</h3>
+            {{wiki_conf.manager}}
+
+            <div class="text-center" style="margin:1em;">
+                <button type="submit" id="save" class="btn btn-primary btn-lg">保存</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+

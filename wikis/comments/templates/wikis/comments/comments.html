@@ -1,0 +1,146 @@
+{% extends "wikis/base_contents.html" %}
+{% load wiki_tags %}
+
+{% block title %}
+{{page_title}}のコメント|{{wiki_conf.name}}
+{% endblock %}
+
+{% block main_contents %}
+
+<style>
+
+    .comment-form{
+      border: 1px solid #666666;
+      padding:0.5em;
+    }
+
+
+    #comment-form0{
+        margin-top:1em;
+    }
+
+    #show_comment_form{
+        display:none;
+    }
+
+
+
+</style>
+
+<div class="main-contents">
+    <div class="page-name-wrapper">
+        <div class="breadcrumb_list-wrapper">
+            <div class="breadcrumb_list">{% breadcrumb_list wiki_id page_dirs %}</div>
+        </div>
+        <h1 class="page-title">{{page_title}}のコメント</h1>
+    </div>
+    <div class="main-contents-body">
+        {% if comment_flg %}
+        {% autoescape off %}
+        {{main_contents}}
+        {% endautoescape %}
+        {% else %}
+        <p>このページはコメント出来ません。</p>
+        {% endif %}
+        <div class="text-right">
+            <a href="{% wiki_url 'maintenance' wiki_id page_dirs %}">[このページを管理]</a>
+        </div>
+    </div>
+    <div class="show-bottom-contents">
+        {% include "wikis/pages/show-bottom-contents.html" %}
+    </div>
+
+</div>
+
+{% if comment_flg %}
+<hr/>
+<div class="comment-wrapper">
+    <h2 id="comment">コメント</h2>
+    <div class="comment">
+        {% if not comments %}
+        <p>コメントはありません。</p>
+        {% else %}
+        {% for comment in comments %}
+        <div class="comment">
+            <p style="margin-left:{{comment.hierarchy}}em;">
+                <span class="comment-id">{{comment.id}}：</span>
+                <span class="comment-body">{{comment.body}}</span>
+                <span> - </span>
+                <span class="comment-name">{{comment.name}}</span>
+                <span class="comment-time">({{comment.timestamp}})</span>
+                <span class="comment-response">
+                    <a href="#" onclick="white_comment({{comment.id}}); return false">[返信する]</a>
+                </span>
+            </p>
+            <div id="comment-form{{comment.id}}" class="comment-form"
+                 style="margin-left:{{comment.hierarchy}}em; display:none">
+                <p>id:{{comment.id}}に返信します。</p>
+                <form id="form{{comment.id}}" action="{{comment_url}}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="wiki_id" value="{{wiki_id}}"/>
+                    <input type="hidden" name="page_name" value="{{form.page_name.value}}"/>
+                    <input type="hidden" name="parent" value="{{comment.id}}"/>
+                    <h3>名前：</h3>
+                    <div class="input-group">
+                        <input type="text" name="name" class="form-control" value="{{form.name.value}}"/>
+                    </div>
+                    <h3>コメント：</h3>
+                    <textarea name="body" class="form-control">{{form.body.value}}</textarea>
+                    <div class="text-center" style="margin-top:0.5em">
+                        <button type="submit" class="btn btn-primary">送信</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <div id="show_comment_form">
+        <a href="#" onclick="white_comment(0); return false">[コメントする]</a>
+    </div>
+
+    <div id="white_comment">
+        <div id="comment-form0" class="comment-form">
+            <p>このページにコメントします。</p>
+            <form id="form0" action="{{comment_url}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="wiki_id" value="{{wiki_id}}"/>
+                <input type="hidden" name="page_name" value="{{form.page_name.value}}"/>
+                <input type="hidden" name="parent" value="0"/>
+                <h3>名前：</h3>
+                <div class="input-group">
+                    <input type="text" name="name" class="form-control" value="{{form.name.value}}"/>
+                </div>
+                <h3>コメント：</h3>
+                <textarea name="body" class="form-control">{{form.body.value}}</textarea>
+                <div class="text-center" style="margin-top:0.5em">
+                    <button type="submit" class="btn btn-primary">送信</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+function white_comment(id){
+
+    $(".comment-form").each(function(i, elem) {
+        $(elem).css("display","none");
+    });
+
+    $("#comment-form" + id).css("display","block");
+
+    if(id == 0){
+        $("#show_comment_form").css("display","none");
+    }else{
+        $("#show_comment_form").css("display","block");
+    }
+};
+
+</script>
+{% endif %}
+
+{% endblock %}
+

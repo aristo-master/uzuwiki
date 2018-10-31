@@ -1,0 +1,36 @@
+{% extends "wikis/base_contents.html" %}
+{% load wiki_tags %}
+
+{% block title %}
+{{page_title}}の差分|{{wiki_conf.name}}
+{% endblock %}
+
+{% block main_contents %}
+
+<div class="main-contents">
+    <div class="page-name-wrapper">
+        <div class="breadcrumb_list-wrapper">
+            <div class="breadcrumb_list">{% breadcrumb_list wiki_id page_dirs %}</div>
+        </div>
+        <h1 class="page-title">{{page_title}}の差分</h1>
+    </div>
+    <div class="main-contents-body">
+        <div class="contents-header text-right">
+            <a href="{% wiki_url 'history' wiki_id page_dirs %}" class="btn btn-secondary">戻る</a>
+        </div>
+        <hr/>
+        {% autoescape off %}
+        {% for diff in diffs %}
+        <div>{{diff}}</div>
+        {% endfor %}
+        {% endautoescape %}
+        <div class="text-right">
+            <a href="{% url 'roots:index' %}">[このページを管理]</a>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}
+

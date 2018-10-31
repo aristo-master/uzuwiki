@@ -1,0 +1,327 @@
+{% extends "commons/base.html" %}
+{% load wiki_tags %}
+
+{% block base_url %}
+<base href="{% url 'wikis.pages:index' wiki_id %}">
+{% endblock %}
+
+{% block navbar %}
+
+
+<style>
+
+    *{
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .separator{
+        border-top: 2px solid #666;
+    }
+
+    .main-contents h1{
+     font-size:140% !important;
+     background-color:#DDDDDD;
+     padding:0.2em;
+    }
+
+    .main-contents h2{
+     font-size:130% !important;
+     border: solid #DDDDDD;
+     border-width: 1px 10px 3px 10px;
+     padding:0.2em;
+    }
+
+    .main-contents h3{
+     font-size:120% !important;
+     border: solid #DDDDDD;
+     border-width: 0px 0px 2px 3px;
+     padding:0.2em;
+    }
+
+    .main-contents h4{
+     font-size:110% !important;
+    }
+
+    .main-contents h5{
+     font-size:100% !important;
+    }
+
+    .main-contents h6{
+     font-size:90% !important;
+    }
+
+    .main-contents table {
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 1em;
+      border-collapse: collapse;
+    }
+
+    .main-contents table > thead > tr > th,
+    .main-contents table > tbody > tr > th,
+    .main-contents table > tfoot > tr > th{
+      background-color: #eeeeee;
+      border: 1px solid #666666;
+      padding:5px;
+      text-align:center;
+    }
+
+    .main-contents table > thead > tr > td,
+    .main-contents table > tbody > tr > td,
+    .main-contents table > tfoot > tr > td {
+      border: 1px solid #222222;
+      background-color: #eef5ff;
+      padding:5px;
+    }
+
+    a:visited { color: #609; }
+    a.btn-secondary:visited { color: #ffffff; }
+
+    h1.page-title{
+        background-color:#DDDDDD;
+        padding:0.2em;
+        font-size:150% !important;
+    }
+
+    .main-contents blockquote {
+     border: solid #DDDDDD;
+     border-width: 0px 0px 0px 5px;
+     padding:0.2em;
+    }
+
+    .main-contents pre {
+     border: solid #DDDDDD;
+     background: #DDDDDD;
+     border-width: 1px 1px 1px 1px;
+     padding:0.2em;
+    }
+
+    .main-contents a:hover {
+        text-decoration: underline;
+    }
+
+    .main-contents mark {
+        background: #ffff00;
+    }
+
+
+
+</style>
+
+
+<style>
+
+    .wiki-title-wrapper{
+        float:left;
+    }
+    .wiki-header .wiki-title{
+        font-size:140%;
+        font-weight:bold;
+    }
+
+    .search-site-header{
+        display:none;
+    }
+
+    .search-site-menu,.navbar-title{
+        display:block;
+    }
+
+    @media (min-width: 768px) {
+        .search-site-header
+        ,.wiki-header{
+            display:block;
+        }
+        .search-site-wrapper{
+            float:right;
+        }
+        .search-site-menu
+        ,.navbar-title{
+            display:none;
+        }
+    }
+
+    .navbar *{
+        line-height:1;
+    }
+
+
+
+</style>
+<div class="wiki-header">
+    <div class="wiki-title-wrapper"><span class="wiki-title">{{wiki_conf.name}}</span></div>
+    <div class="search-site-header">
+        <div class="search-site-wrapper">
+            <form class="form-inline">
+                <input id="search-input-1" class="form-control" type="search" placeholder="サイト内検索">
+                <button type="button" id="search-btn-1" class="btn btn-outline-success my-2 my-sm-0">検索</button>
+            </form>
+        </div>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+
+
+<style>
+
+.navbar-light{
+  background-color:#DDDDDD;
+}
+.navbar-light .navbar-brand:focus, .navbar-light .navbar-brand:hover,
+.navbar-light .navbar-toggler:focus,
+.navbar-light .navbar-toggler:hover {
+  color: #215dc6;
+  text-decoration: underline;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: #215dc6;
+}
+
+.navbar-light .navbar-nav .nav-link:focus, .navbar-light .navbar-nav .nav-link:hover {
+  color: rgba(0, 0, 0, 0.7);
+  text-decoration: underline;
+  background-color: #def;
+}
+
+
+
+</style>
+
+<nav class="navbar navbar-expand-md navbar-light navbar-light">
+    <div class="navbar-title">
+        <span class="navbar-brand"><span class="wiki-title">メニュー</span></span>
+    </div>
+    <div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item ">
+                <a class="nav-link" href="{% url 'wikis.pages:index' wiki_id %}">[ホーム]</a>
+            </li>
+            {% if mode == 'show'%}
+            <li class="nav-item ">
+                <a class="nav-link" href="{% wiki_url 'edit' wiki_id page_dirs %}">[編集]</a>
+            </li>
+
+            {% elif mode == 'edit' or mode == 'history' or mode == 'pagemnt' %}
+            <li class="nav-item ">
+                <a class="nav-link" href="{% wiki_url 'show' wiki_id page_dirs %}">[戻る]</a>
+            </li>
+            {% endif %}
+            {% if mode == 'show' or mode == 'edit' or mode == 'pagemnt' %}
+            <li class="nav-item ">
+                <a class="nav-link" href="{% wiki_url 'attach' wiki_id page_dirs %}">[添付]</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="{% wiki_url 'history' wiki_id page_dirs %}">[履歴]</a>
+            </li>
+            {% endif %}
+        </ul>
+        <ul class="navbar-nav">
+            {% if mode != 'create' and mode != 'copy'%}
+            <li class="nav-item ">
+                <a class="nav-link" href="{% url 'wikis.pages:create' wiki_id  %}">[新規]</a>
+            </li>
+            {% endif %}
+            {% if mode == 'show' or mode == 'edit' or mode == 'attach' %}
+            <li class="nav-item ">
+                <a class="nav-link" href="{% wiki_url 'copy' wiki_id page_dirs %}">[複製]</a>
+            </li>
+            {% endif %}
+            {% if mode != 'list' %}
+            <li class="nav-item ">
+                <a class="nav-link" href="{% url 'wikis.pages:list' wiki_id  %}">[一覧]</a>
+            </li>
+            {% endif %}
+            <li class="nav-item ">
+                <a class="nav-link" href="{% url 'wikis.pages:help' wiki_id %}">[ヘルプ]</a>
+            </li>
+            {% if wiki_manager_flg %}
+            {% if page_dirs %}
+            <li class="nav-item ">
+                <a class="nav-link" href="{% wiki_url 'maintenance' wiki_id page_dirs %}">[管理]</a>
+            </li>
+            {% else %}
+            <li class="nav-item ">
+                <a class="nav-link" href="{% url 'wikis.maintenances:index' wiki_id %}">[管理]</a>
+            </li>
+            {% endif %}
+            {% endif %}
+            {% if not is_login %}
+            <li class="nav-item ">
+                <a class="nav-link" href="{% url 'accounts:index' %}">[ログイン]</a>
+            </li>
+            {% else %}
+            <li class="nav-item ">
+                <a class="nav-link" href="{% url 'accounts:info' %}">[ログイン中]</a>
+            </li>
+            {% endif %}
+        </ul>
+
+        <div class="search-site-menu">
+            <div class="search-site-wrapper">
+                <form class="form-inline my-2 my-lg-0">
+                    <input id="search-input-2" class="form-control mr-sm-2" type="search" placeholder="サイト内検索"
+                           aria-label="サイト内検索">
+                    <button type="button" id="search-btn-2" class="btn btn-outline-success my-2 my-sm-0">Search</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</nav>
+
+<div class="separator"></div>
+
+{% include "commons/message.html" %}
+
+{% endblock %}
+
+
+{% block bottom %}
+
+<style>
+    .footer-wrapper{
+        clear: both;
+    }
+
+
+</style>
+<div class="footer-wrapper">
+    <div class="spacer"></div>
+    <div class="separator"></div>
+    <div class="footer text-center">
+        Powerd by <a href="{% url 'roots:index' %}">{{service_title}}</a>
+    </div>
+</div>
+
+<script>
+
+$(function() {
+
+    $('#search-btn-1').click(function(){
+
+        url = "https://www.google.co.jp/search?q=" + $('#search-input-1').val() + "+site:{{host}}+inurl:{{wiki_id}}";
+        window.location.href = url;
+
+    });
+
+    $('#search-btn-2').click(function(){
+
+        url = "https://www.google.co.jp/search?q=" + $('#search-input-2').val() + "+site:{{host}}+inurl:{{wiki_id}}";
+        window.location.href = url;
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "roots/base.html" %}
+
+{% block title %}新しくWikiを作成|{{service_title}}{% endblock %}
+
+{% block contents %}
+{% include "commons/message.html" %}
+<div class="container">
+
+    <h1 style="margin-top:0.5em;">新しくWikiを作成</h1>
+
+    <div class="text-right">
+        {% include "commons/return.html" %}
+    </div>
+
+    <hr/>
+
+    <p class="alert alert-info">本サービスは現在、総合管理人のみがWikiを作成できる設定で稼働しています。<br/>
+    一般ユーザの方はご利用出来ません。ご了承ください。</p>
+    <div class="text-center">
+        <a href="{% url 'accounts:info' %}" class="btn btn-primary">ログアウト</a>
+    </div>
+
+    <hr/>
+    <div class="text-center">
+        {% include "commons/return.html" %}
+    </div>
+
+</div>
+
+{% endblock %}

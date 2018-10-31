@@ -1,0 +1,23 @@
+{% extends "commons/base.html" %}
+
+{% block title %}ログイン完了{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% include "commons/message.html" %}
+
+    <h1 class="text-center">ログインしました</h1>
+
+
+    <div class="text-center">
+        <a href="{% url 'accounts:index' %}" class="btn btn-primary">別のアカウントで一度ログインする</a>
+    </div>
+
+    <div class="text-center" style="margin-top:1em;">
+        {% include "commons/return.html" %}
+    </div>
+
+</div>
+{% endblock %}

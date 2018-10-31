@@ -1,0 +1,11 @@
+{
+  "file_type": "page_conf",
+  "data": {
+  },
+  "confs": {
+    "comment_mode": "1",
+    "attachment_mode": "1"
+  },
+  "created_at": "{{timestamp}}",
+  "updated_at": "{{timestamp}}"
+}

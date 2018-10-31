@@ -1,0 +1,10 @@
+django
+Markdown
+social-auth-app-django
+bleach
+django-ipware
+MarkdownSubscript
+MarkdownHighlight
+awscli
+zappa
+oauth2client

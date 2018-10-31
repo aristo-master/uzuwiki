@@ -1,0 +1,9 @@
+{% load wiki_tags %}
+
+{% for breadcrumb in breadcrumb_list %}
+    {% if not forloop.last %}
+    <a href="{{breadcrumb.url}}">{{breadcrumb.name}}</a> >
+    {% else %}
+    {{breadcrumb.name}}
+    {% endif %}
+{% endfor %}

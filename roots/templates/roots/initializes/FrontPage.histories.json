@@ -1,0 +1,12 @@
+{
+  "file_type": "page_history",
+  "histories": [
+    {
+      "name": "FrontPage",
+      "timestamp": "{{timestamp}}",
+      "comment": "created",
+      "client_ip": "{{client_ip}}",
+      "user_digest": "{{user_digest}}"
+    }
+  ]
+}

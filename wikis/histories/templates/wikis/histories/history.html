@@ -1,0 +1,47 @@
+{% extends "wikis/base_contents.html" %}
+{% load wiki_tags %}
+
+{% block title %}
+{{page_title}}の更新履歴|{{wiki_conf.name}}
+{% endblock %}
+
+{% block main_contents %}
+
+
+<div class="main-contents">
+    <div class="page-name-wrapper">
+        <div class="breadcrumb_list-wrapper">
+            <div class="breadcrumb_list">{% breadcrumb_list wiki_id page_dirs %}</div>
+        </div>
+        <h1 class="page-title">{{page_title}}の更新履歴</h1>
+    </div>
+    <div class="main-contents-body">
+        <ul>
+            {% for history in history_file.histories %}
+            <li>{{ history.timestamp|date:"Y年m月d日(D) H時i分" }}
+                {{ history.comment }}{% if forloop.last %}（最新）{% endif %}
+                {% if forloop.last %}
+                {% if not forloop.first %}
+                <a href="{% wiki_url 'diff' wiki_id page_dirs %}?history_file_path={{ history.before_history_file_path }}">
+                    [前回との差分]
+                </a>
+                {% endif %}
+                <a href="{% wiki_url 'edit' wiki_id page_dirs %}">[編集]</a>
+                {% else %}
+                {% if history.before_history_file_path%}
+                <a href="{% wiki_url 'diff' wiki_id page_dirs %}?history_file_path={{ history.history_file_path }}&before_history_file_path={{ history.before_history_file_path }}">
+                    [前回との差分]
+                </a>
+                {% endif %}
+                <a href="{% wiki_url 'diff' wiki_id page_dirs %}?history_file_path={{ history.history_file_path }}">[現在との差分]</a>
+                <a href="{% wiki_url 'src' wiki_id page_dirs %}?history_file_path={{ history.history_file_path }}">[ソース]</a>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,40 @@
+{% extends "wikis/base_contents.html" %}
+
+{% block title %}
+ページの一覧|{{wiki_conf.name}}
+{% endblock %}
+
+{% block main_contents %}
+
+
+<div class="main-contents">
+    <div class="page-name-wrapper">
+        <h1 class="page-name">最終更新</h1>
+    </div>
+    <div class="main-contents-body">
+        <div>
+            {% regroup pages by update_day as pages_days %}
+            {% for pages_day in pages_days %}
+            <div class="update-day">{{pages_day.grouper|date:"Y年m月d日(D)"}}</div>
+            <ul class="latest-update">
+                {% for page in pages_day.list %}
+                {% if page.status != "inactive" %}
+                <li>
+                    {{ page.update|date:"H時i分" }}  <a href="{{page.url}}">{{ page.file_name }}</a>
+                </li>
+                {% else %}
+                <li>
+                    {{ page.update|date:"H時i分" }}  <a href="{{page.url}}">{{ page.file_name }}</a> deleted
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+            {% endfor %}
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

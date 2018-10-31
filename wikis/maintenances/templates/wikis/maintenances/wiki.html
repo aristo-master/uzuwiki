@@ -1,0 +1,53 @@
+{% extends "wikis/base_contents.html" %}
+{% load wiki_tags %}
+
+{% block title %}
+{{wiki_conf.name}}の管理
+{% endblock %}
+
+{% block main_contents %}
+<style>
+    .main-contents ul {
+        list-style: none;
+        padding-left:1em;
+    }
+
+</style>
+
+<div class="main-contents">
+    <div class="page-name-wrapper">
+        <h1 class="page-name">wiki「{{wiki_conf.name}}」の管理</h1>
+    </div>
+    <div class="main-contents-body">
+        <p>{{wiki_conf.name}}全体の管理画面です。</p>
+
+        <form id="form" method="post">
+            {% csrf_token %}
+            <h2>管理項目</h2>
+            <input type="hidden" name="wiki_id" value="{{form.wiki_id.value}}"/>
+            <h3>Wiki名</h3>
+            <input type="text" name="name" class="form-control"
+                   value="{{form.name.value}}" style="margin-bottom:1em;" placeholder="wiki名を入力して下さい。"/>
+            <h3>コメント</h3>
+            {{form.comment_mode}}
+
+            <h3>編集権限</h3>
+            {{form.edit_authority}}
+
+            <h3>公開状態</h3>
+            {{form.release_status}}
+
+            <h3>管理人のユーザダイジェスト</h3>
+            {{wiki_conf.manager}}
+
+            <div class="text-center" style="margin:1em;">
+                <button type="submit" id="save" class="btn btn-primary btn-lg">保存</button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}
+

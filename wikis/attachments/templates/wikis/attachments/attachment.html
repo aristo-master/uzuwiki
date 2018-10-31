@@ -1,0 +1,95 @@
+{% extends "wikis/base_contents.html" %}
+{% load wiki_tags %}
+{% load humanize %}
+
+{% block title %}
+{{page_title}}のファイル添付|{{wiki_conf.name}}
+{% endblock %}
+
+
+{% block main_contents %}
+
+<div class="main-contents">
+    <form id="form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="wiki_id" value="{{form.wiki_id.value}}"/>
+        <input type="hidden" name="page_name" value="{{form.page_name.value}}"/>
+        <div class="page-name-wrapper">
+            <div class="breadcrumb_list-wrapper">
+                <div class="breadcrumb_list">{% breadcrumb_list wiki_id page_dirs %}</div>
+            </div>
+            <h1 class="page-title">{{page_title}}のファイル添付</h1>
+        </div>
+        <div>
+            <div>
+                <input type="file" name="file"/>
+            </div>
+            <div class="text-center" style="margin:1em;">
+                <button type="submit" class="btn btn-primary btn-lg">アップロード</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<h2>添付ファイル</h2>
+<table class="table">
+    <thead>
+    <th>ファイル</th>
+    <th>URL</th>
+    <th>サイズ<br>(Byte)</th>
+    <th>タイプ</th>
+    <th>日時</th>
+    </thead>
+    <tbody>
+    {% for attachment in attachments %}
+    <tr>
+        <td><a href="{% attachment_url attachment %}">{{attachment.name}}</a></td>
+        <td>
+            <div class="input-group">
+                <input id="{{ attachment.id }}" type="text" class="form-control copy tooltips"
+                       value="{% attachment_url attachment %}" title="コピーしました"/>
+            </div>
+
+        </td>
+        <td>{{ attachment.size|intcomma }}</td>
+        <td>{{attachment.mime}}</td>
+        <td>{{attachment.timestamp}}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-powertip/1.2.0/jquery.powertip.min.js"></script>
+<link rel="stylesheet" type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-powertip/1.2.0/css/jquery.powertip.min.css"/>
+
+<script>
+
+$(function() {
+
+    $('.copy').click(function(){
+
+        var copyTarget = $(this);
+        copyTarget.select();
+        document.execCommand("Copy");
+        $.powerTip.toggle(this);
+
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+{% endblock %}
+

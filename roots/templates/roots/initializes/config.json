@@ -1,0 +1,12 @@
+{
+  "id": "{{wiki_id}}",
+  "file_type": "wiki_conf",
+  "name": "未設定",
+  "confs": {
+  },
+  "manager": "{{user_digest}}",
+  "options": {},
+  "created_at": "{{timestamp}}",
+  "updated_at": "{{timestamp}}",
+  "status": "Active"
+}

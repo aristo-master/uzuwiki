@@ -1,0 +1,5 @@
+{% if return_url %}
+<a href="{{return_url}}" class="btn btn-secondary">戻る</a>
+{% else %}
+<a href="{% url 'roots:index' %}" class="btn btn-secondary">戻る</a>
+{% endif %}

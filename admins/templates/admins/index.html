@@ -1,0 +1,28 @@
+{% extends "commons/base.html" %}
+
+{% block title %}{{service_title}}|管理コンソール{% endblock %}
+
+{% block body %}
+
+
+<div class="container">
+
+    {% include "commons/message.html" %}
+
+    <h1 class="text-center">{{service_title}} 管理コンソール</h1>
+
+    <hr/>
+
+    <div>
+        <ul>
+            <li>
+                <a href="{% url 'admins:google_credentials' %}">
+                    Googleクレジット取得
+                </a>
+            </li>
+        </ul>
+    </div>
+
+
+</div>
+{% endblock %}

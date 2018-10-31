@@ -1,0 +1,31 @@
+{% extends "wikis/base_contents.html" %}
+{% load wiki_tags %}
+
+{% block title %}
+権限がありません|{{wiki_conf.name}}
+{% endblock %}
+
+{% block main_contents %}
+
+<div class="main-contents">
+    <div class="page-name-wrapper">
+        <div class="breadcrumb_list-wrapper">
+            <div class="breadcrumb_list">{% breadcrumb_list wiki_id page_dirs %}</div>
+        </div>
+        <h1 class="page-title">{{page_title}}</h1>
+    </div>
+    <div class="main-contents-body">
+        <p>権限がありません。</p>
+
+        {% if wiki_conf.confs.edit_authority == "1" %}
+        <p>このWikiを編集するにはログインする必要があります。<br/><a href="{% url 'accounts:index' %}">[ログイン]</a>からログインして下さい。</p>
+        {% endif %}
+
+        {% if wiki_conf.confs.edit_authority == "2" %}
+        <p>このWikiは管理人しか編集出来ません。<br/>管理人の方は<a href="{% url 'accounts:index' %}">[ログイン]</a>から管理人のアカウントでログインして下さい。</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+

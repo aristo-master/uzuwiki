@@ -1,0 +1,39 @@
+{% extends "roots/base.html" %}
+
+{% block title %}新しくWikiを作成|{{service_title}}{% endblock %}
+
+{% block contents %}
+{% include "commons/message.html" %}
+<div class="container">
+
+    <h1 style="margin-top:0.5em;">新しくWikiを作成</h1>
+
+    <div class="text-right">
+        {% include "commons/return.html" %}
+    </div>
+
+    <hr/>
+
+    <form id="form" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="wiki_id" value="{{wiki_id}}"/>
+        <p>以下に作成するページ名を入力し、「新規ページ作成」を押下して下さい。</p>
+        <div class="h5">ＷｉｋｉＩＤ：</div>
+        <div>
+            <input type="text" name="wiki_id" class="form-control" value="{{form.wiki_id.value}}"
+                   placeholder="wikiID名を入力して下さい。"/>
+            <p>ＷｉｋｉＩＤは作成後に変更出来ません。</p>
+        </div>
+        <div class="text-center" style="margin:1em;">
+            <button type="submit" id="save" class="btn btn-primary btn-lg">新規Wikiを作成</button>
+        </div>
+    </form>
+
+    <hr/>
+    <div class="text-center">
+        {% include "commons/return.html" %}
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "commons/base.html" %}
+{% load wiki_tags %}
+
+{% block body %}
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">{{service_title}}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'roots:create' %}">新しくwikiを作成する</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'roots:agreement' %}">利用規約</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'roots:privacy' %}">プライバシーポリシー</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            {% if not is_login %}
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'accounts:index' %}">ログイン</a>
+            </li>
+            {% else %}
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'accounts:info' %}">ログイン中</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+{% block contents %}{% endblock %}
+
+{% endblock %}
+
+

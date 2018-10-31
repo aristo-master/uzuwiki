@@ -1,0 +1,41 @@
+{% extends "wikis/base_contents.html" %}
+{% load wiki_tags %}
+
+{% block title %}新規ページ作成|{{wiki_conf.name}}{% endblock %}
+
+
+{% block main_contents %}
+
+<div class="main-contents">
+    <form id="form" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="wiki_id" value="{{form.wiki_id.value}}"/>
+        <div class="pagename-wrapper"><h1 class="page_name">新規ページ複製</h1></div>
+        <p>以下に作成するページ名を入力し、「新規ページ作成」を押下して下さい。</p>
+        <div class="h5">新規ページ名：</div>
+        <div class="input-group">
+            <input type="text" name="page_name" class="form-control" placeholder="ページ名を入力して下さい。"
+                   value="{{form.page_name.value}}"/>
+        </div>
+        <div class="text-center" style="margin:1em;">
+            <button type="submit" class="btn btn-primary btn-lg">新規ページ作成</button>
+        </div>
+        <textarea name="contents" style="display:none;">{{form.contents.value}}</textarea>
+
+        <div class="separator"></div>
+        <p style="margin-top:1em;">以下のページを複製します。複製元をご確認下さい。</p>
+        <div class="page-name-wrapper">
+        <div class="breadcrumb_list-wrapper">
+            <div class="breadcrumb_list">{% breadcrumb_list wiki_id page_dirs %}</div>
+        </div>
+        </div>
+        <div class="main-contents-body">
+            {% autoescape off %}
+            {{main_contents}}
+            {% endautoescape %}
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+

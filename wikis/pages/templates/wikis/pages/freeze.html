@@ -1,0 +1,27 @@
+{% extends "wikis/base_contents.html" %}
+{% load wiki_tags %}
+
+{% block title %}
+{{page_title}}|{{wiki_conf.name}}
+{% endblock %}
+
+{% block main_contents %}
+
+<div class="main-contents">
+    <div class="page-name-wrapper">
+        <div class="breadcrumb_list-wrapper">
+            <div class="breadcrumb_list">{% breadcrumb_list wiki_id page_dirs %}</div>
+        </div>
+        <h1 class="page-title">{{page_title}}</h1>
+    </div>
+    <div class="main-contents-body">
+        <div class="freeze_message">
+            <p>このページは凍結されています。</p>
+            <p>ページの凍結/解除は管理人しか行えません。管理人の方は<a href="{% wiki_url 'maintenance' wiki_id page_dirs %}">[管理ページ]</a>から凍結を解除して下さい。
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

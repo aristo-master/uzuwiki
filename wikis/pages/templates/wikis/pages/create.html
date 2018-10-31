@@ -1,0 +1,39 @@
+{% extends "wikis/base_contents.html" %}
+
+{% block title %}新規ページ作成|{{wiki_conf.name}}{% endblock %}
+
+
+{% block main_contents %}
+
+<div class="main-contents">
+    <form id="form" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="wiki_id" value="{{form.wiki_id.value}}"/>
+        <div class="pagename-wrapper"><h1 class="page_name">新規ページ作成</h1></div>
+        <p>以下に作成するページ名を入力し、「新規ページ作成」を押下して下さい。</p>
+        <div class="h5">新規ページ名：</div>
+        <div>
+            <input type="text" name="page_name" class="form-control" placeholder="ページ名を入力して下さい。"
+                   value="{{form.page_name.value|default:''}}"/>
+        </div>
+        <div class="text-center" style="margin:1em;">
+            <button type="submit" id="save" class="btn btn-primary btn-lg">新規ページ作成</button>
+        </div>
+        <textarea name="contents" style="display:none;">#新規ページ：ページタイトル
+
+新規ページです。編集を行ってコンテンツを作成して下さい。</textarea>
+    </form>
+
+    <div class="hint">
+        <h2>作業のヒント（複製して新規作成）</h2>
+        <p>どこかのページをコピーして新規作成したい場合は、コピーしたいページに移動して、そこからヘッダーメニューの「複製」を選択して下さい。</p>
+    </div>
+
+    <div class="hint">
+        <h2>作業のヒント（カテゴリ対応）</h2>
+        <p>ページをカテゴリー毎に分類したい場合、「カテゴリ１&gt;カテゴリ２&gt;ページ」とすることでツリー構造を表現出来ます。</p>
+    </div>
+</div>
+
+{% endblock %}
+

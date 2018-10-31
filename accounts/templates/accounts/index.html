@@ -1,0 +1,118 @@
+{% extends "commons/base.html" %}
+
+{% block title %}{{service_title}}|ログイン{% endblock %}
+
+{% block body %}
+
+<style>
+div.login-list{
+    margin-top:0.5em;
+    margin-bottom:1em;
+    margin-left:auto;
+    margin-right:auto;
+}
+.login-list div{
+  text-decoration: none;
+  margin-top: 0;
+}
+.login-list ul {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none;
+}
+.login-list ul:after {
+  display: block;
+  clear: both;
+  content: &#39;&#39;;
+}
+.login-list li {
+  float: left;
+  margin: 0.1em !important;
+  padding: 0 !important;
+}
+.login-list li a {
+  font-size: 14px;
+  display: block;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+}
+.login-list li a:hover {
+  opacity: .8;
+  text-decoration: none;
+}
+.login-list .tweet a {
+  background-color: #55acee;
+}
+.login-list .facebook a {
+  background-color: #315096;
+}
+.login-list .google a {
+  background-color: #dd4b39;
+}
+.login-list .hatena a {
+  background-color: #008fde;
+}
+.login-list .line a {
+  background-color: #00c300;
+}
+.login-list .pocket a {
+  background-color: #EE4256;
+}
+.login-list .icon-hatena{
+  font-style: normal;
+  font-weight:bold;
+}
+@media(max-width: 768px) {
+  .login-list li span {
+    display:none;
+  }
+}
+
+
+</style>
+
+<div class="container">
+
+    {% include "commons/message.html" %}
+
+    <h1 class="text-center">{{service_title}} ログイン</h1>
+
+    <div class="text-right">
+        {% include "commons/return.html" %}
+    </div>
+
+    <p>
+        登録すると、<a href="{% url 'roots:agreement' %}">利用規約</a>および<a href="{% url 'roots:privacy' %}">プライバシーポリシー</a>に同意したことになります。
+    </p>
+
+    <h2>ログイン</h2>
+    <p>以下の連携サービスよりログインして下さい。</p>
+
+    <h3>OpenID認証</h3>
+    <div class="login-list">
+        <ul>
+            <li class='google'>
+                <a href="{% url 'accounts:begin' 'google-oauth2' %}">
+                    <i class='fab fa-google-plus-g'></i><span> Googleでログイン</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div style="clear: both;"></div>
+
+    <p>※OpenID認証とは、認証先の機関のIDを使用して本サービスの認証を行うものです。<br/>
+        　認証に必要なパスワードを本サービス内に保持しないため、本サービスからパスワードが流出することを防げる高セキュリティな認証です。</p>
+
+    <p>※TwitterやFaceBookなど、OpenID認証を提供していないサービスのアカウントでログインは出来ません。ご了承ください。</p>
+
+    <h3>IDとパスワードで認証</h3>
+    <p>IDとパスワードによる認証はセキュリティ上のリスクを伴うため、本サービスでは提供していません。</p>
+    <div class="text-center">
+        {% include "commons/return.html" %}
+    </div>
+
+</div>
+{% endblock %}

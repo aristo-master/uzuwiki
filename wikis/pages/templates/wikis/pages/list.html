@@ -1,0 +1,26 @@
+{% extends "wikis/base_contents.html" %}
+
+{% block title %}
+ページの一覧|{{wiki_conf.name}}
+{% endblock %}
+
+{% block main_contents %}
+
+
+<div class="main-contents">
+    <div class="page-name-wrapper">
+        <h1 class="page-name">{{wiki_conf.name}}のページ一覧</h1>
+    </div>
+    <div class="main-contents-body">
+        <p>ページ名の昇順で表示しています。</p>
+        <ul>
+        {% for page in pages %}
+            <li><a href="{{page.url}}">{{ page.file_name }} </a>（更新日：{{ page.update|date:"Y年m月d日(D) H時i分" }}）</li>
+        {% endfor %}
+        </ul>
+    </div>
+
+</div>
+
+{% endblock %}
+

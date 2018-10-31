@@ -1,0 +1,16 @@
+{% extends "commons/base.html" %}
+
+{% block title %}{{service_title}}{% endblock %}
+
+{% block body %}
+
+
+<div class="container">
+
+    <p class="alert alert-info" style="margin:3em;">本機能は総合管理人しか使用出来ません。総合管理人はログインして下さい。</p>
+    <div class="text-center">
+        <a href="{% url 'accounts:index' %}" class="btn btn-lg btn-primary">ログイン</a>
+    </div>
+
+</div>
+{% endblock %}

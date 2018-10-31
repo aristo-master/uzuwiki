@@ -1,0 +1,66 @@
+{% extends "commons/base.html" %}
+
+{% block title %}アカウント情報{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% include "commons/message.html" %}
+
+    <h1>アカウント情報</h1>
+
+    <div class="text-right">
+        {% include "commons/return.html" %}
+    </div>
+
+    <hr/>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-light">
+        <tr>
+            <th class="text-center">項目</th>
+            <th class="text-center">パラメータ</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th nowrap>認証機関</th>
+            <td>{{social_name}} （本人にのみ表示しています。）</td>
+        </tr>
+        <tr>
+            <th nowrap>ユーザーダイジェスト</th>
+            <td style="word-break: break-all">{{user_digest}}</td>
+        </tr>
+        <tr>
+            <th nowrap>ユーザID</th>
+            <td>{{pkey}} （本人にのみ表示しています。）</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="text-center">
+        <a href="{% url 'accounts:logout' %}" class="btn btn-warning">ログアウト</a>
+    </div>
+
+    <hr/>
+
+    <h2>ログイン情報の使用方法について</h2>
+    <p>
+        本サービスでは、ログイン状態でwikiページを編集した場合、編集履歴に「ユーザダイジェスト」を記録しています。<br/>
+        ユーザダイジェストは編集したユーザを一意に識別する為のパラメータですが、ユーザダイジェストから逆算してユーザIDを特定することは出来ません。
+    </p>
+    <h2>OpenID認証について</h2>
+    <p>
+        本サービスでは、アカウントの管理に自身でパスワードを保有せず、他の認証機関を利用するOpenIDを採用しています。
+        パスワードを忘れるなどして他の認証機関にログインできなくなった場合、本サービスでは復旧することが出来ません。
+        連携先の認証機関にお問い合わせください。
+    </p>
+
+    <hr/>
+
+    <div class="text-center">
+        {% include "commons/return.html" %}
+    </div>
+
+</div>
+{% endblock %}
